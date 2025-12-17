@@ -33,6 +33,41 @@ void pedirFechaActual() {
     cout << "Anio: "; cin >> fechaActual.anio;
 }
 
+// Funcion para registrar un nuevo libro
+void registrarLibro() {
+    Libro nuevoLibro;
+    cout << "\n--- REGISTRAR LIBRO ---" << endl;
+    cout << "ID del libro: ";
+    cin >> nuevoLibro.id;
+    cin.ignore(); // Limpiar el buffer de entrada antes de usar getline
+    cout << "Titulo: ";
+    getline(cin, nuevoLibro.titulo);
+    cout << "Autor: ";
+    getline(cin, nuevoLibro.autor);
+
+    nuevoLibro.prestado = false;
+    nuevoLibro.fechaPrestamo = {0, 0, 0};
+    nuevoLibro.fechaDevolucion = {0, 0, 0};
+
+    biblioteca.push_back(nuevoLibro);
+    cout << "Libro registrado exitosamente." << endl;
+}
+
+// Funcion para listar los libros
+void listarLibros() {
+    cout << "\n--- LISTA DE LIBROS ---" << endl;
+    if (biblioteca.empty()) {
+        cout << "No hay libros registrados en la biblioteca." << endl;
+    } else {
+        for (size_t i = 0; i < biblioteca.size(); i++) {
+            cout << "ID: " << biblioteca[i].id
+                 << " | Titulo: " << biblioteca[i].titulo
+                 << " | Autor: " << biblioteca[i].autor
+                 << " | Estado: " << (biblioteca[i].prestado ? "PRESTADO" : "DISPONIBLE") << endl;
+        }
+    }
+}
+
 // Funcion para mostrar el menu de opciones
 void mostrarMenu() {
     cout << "\n--- MENU PRINCIPAL ---" << endl;
@@ -54,10 +89,10 @@ int main() {
 
         switch(opcion) {
             case 1:
-                cout << ">> Opcion 'Listar libros' aun no implementada." << endl;
+                listarLibros();
                 break;
             case 2:
-                cout << ">> Opcion 'Registrar libro' aun no implementada." << endl;
+                registrarLibro();
                 break;
             case 3:
                 cout << ">> Opcion 'Eliminar libro' aun no implementada." << endl;
