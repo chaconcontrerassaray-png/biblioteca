@@ -68,6 +68,38 @@ void listarLibros() {
     }
 }
 
+// Funcion para eliminar un libro
+void eliminarLibro() {
+    cout << "\n--- ELIMINAR LIBRO ---" << endl;
+    if (biblioteca.empty()) {
+        cout << "No hay libros para eliminar." << endl;
+        return;
+    }
+
+    int idEliminar;
+    cout << "Ingrese el ID del libro a eliminar: ";
+    cin >> idEliminar;
+
+    bool encontrado = false;
+    for (size_t i = 0; i < biblioteca.size(); i++) {
+        if (biblioteca[i].id == idEliminar) {
+            // Verificar si esta prestado antes de eliminar (opcional, pero buena practica)
+            if (biblioteca[i].prestado) {
+                cout << "No se puede eliminar el libro porque esta prestado." << endl;
+            } else {
+                biblioteca.erase(biblioteca.begin() + i);
+                cout << "Libro eliminado exitosamente." << endl;
+            }
+            encontrado = true;
+            break;
+        }
+    }
+
+    if (!encontrado) {
+        cout << "Libro con ID " << idEliminar << " no encontrado." << endl;
+    }
+}
+
 // Funcion para mostrar el menu de opciones
 void mostrarMenu() {
     cout << "\n--- MENU PRINCIPAL ---" << endl;
@@ -95,7 +127,7 @@ int main() {
                 registrarLibro();
                 break;
             case 3:
-                cout << ">> Opcion 'Eliminar libro' aun no implementada." << endl;
+                eliminarLibro();
                 break;
             case 4:
                 cout << ">> Opcion 'Prestamo de libros' aun no implementada." << endl;
