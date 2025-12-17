@@ -63,7 +63,13 @@ void listarLibros() {
             cout << "ID: " << biblioteca[i].id
                  << " | Titulo: " << biblioteca[i].titulo
                  << " | Autor: " << biblioteca[i].autor
-                 << " | Estado: " << (biblioteca[i].prestado ? "PRESTADO" : "DISPONIBLE") << endl;
+                 << " | Estado: " << (biblioteca[i].prestado ? "PRESTADO" : "DISPONIBLE");
+
+            if (biblioteca[i].prestado) {
+                cout << " (Devolver el: " << biblioteca[i].fechaDevolucion.dia << "/"
+                     << biblioteca[i].fechaDevolucion.mes << "/" << biblioteca[i].fechaDevolucion.anio << ")";
+            }
+            cout << endl;
         }
     }
 }
@@ -83,7 +89,6 @@ void eliminarLibro() {
     bool encontrado = false;
     for (size_t i = 0; i < biblioteca.size(); i++) {
         if (biblioteca[i].id == idEliminar) {
-            // Verificar si esta prestado antes de eliminar (opcional, pero buena practica)
             if (biblioteca[i].prestado) {
                 cout << "No se puede eliminar el libro porque esta prestado." << endl;
             } else {
@@ -97,6 +102,47 @@ void eliminarLibro() {
 
     if (!encontrado) {
         cout << "Libro con ID " << idEliminar << " no encontrado." << endl;
+    }
+}
+
+// Funcion para realizar el prestamo de libros
+void prestarLibro() {
+    cout << "\n--- PRESTAMO DE LIBROS ---" << endl;
+    if (biblioteca.empty()) {
+        cout << "No hay libros en la biblioteca." << endl;
+        return;
+    }
+
+    int idPrestar;
+    cout << "Ingrese el ID del libro a prestar: ";
+    cin >> idPrestar;
+
+    bool encontrado = false;
+    for (size_t i = 0; i < biblioteca.size(); i++) {
+        if (biblioteca[i].id == idPrestar) {
+            encontrado = true;
+            if (biblioteca[i].prestado) {
+                cout << "El libro ya se encuentra prestado." << endl;
+            } else {
+                // Registrar fecha de prestamo (fecha actual)
+                biblioteca[i].fechaPrestamo = fechaActual;
+
+                // Pedir fecha de devolucion
+                cout << "La fecha de prestamo es hoy: " << fechaActual.dia << "/" << fechaActual.mes << "/" << fechaActual.anio << endl;
+                cout << "Ingrese la fecha de devolucion:" << endl;
+                cout << "Dia: "; cin >> biblioteca[i].fechaDevolucion.dia;
+                cout << "Mes: "; cin >> biblioteca[i].fechaDevolucion.mes;
+                cout << "Anio: "; cin >> biblioteca[i].fechaDevolucion.anio;
+
+                biblioteca[i].prestado = true;
+                cout << "Prestamo registrado exitosamente." << endl;
+            }
+            break;
+        }
+    }
+
+    if (!encontrado) {
+        cout << "Libro con ID " << idPrestar << " no encontrado." << endl;
     }
 }
 
@@ -130,7 +176,7 @@ int main() {
                 eliminarLibro();
                 break;
             case 4:
-                cout << ">> Opcion 'Prestamo de libros' aun no implementada." << endl;
+                prestarLibro();
                 break;
             case 5:
                 cout << "Gracias por usar el sistema." << endl;
